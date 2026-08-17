@@ -1,0 +1,37 @@
+# ── Generated index ───────────────────────────────────────────────────────
+# df_wiki_v2.db is built by ingest.py and is fully reproducible. At ~119 MB
+# it also exceeds GitHub's 100 MB hard limit. Rebuild: python ingest.py
+*.db
+*.db.tmp
+*.sqlite
+*.sqlite3
+
+# ── Source dump ───────────────────────────────────────────────────────────
+# df_wiki.xml is a third-party MediaWiki export (64 MB), not ours to ship.
+# See README "Obtaining the dump".
+*.xml
+*.xml.gz
+*.xml.bz2
+
+# ── Python ────────────────────────────────────────────────────────────────
+__pycache__/
+*.py[cod]
+.venv/
+venv/
+*.egg-info/
+.pytest_cache/
+.mypy_cache/
+.ruff_cache/
+
+# ── Editor / OS ───────────────────────────────────────────────────────────
+.vscode/
+.idea/
+*.swp
+.DS_Store
+Thumbs.db
+desktop.ini
+*.lnk
+
+# ── Local agent config ────────────────────────────────────────────────────
+.claude/settings.local.json
+.mcp.json

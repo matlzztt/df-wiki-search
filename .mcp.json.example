@@ -1,0 +1,14 @@
+{
+  "//": "Copy to .mcp.json, or merge into your user-level ~/.claude.json.",
+  "//paths": "Both paths must be absolute — MCP servers are not launched from the project directory.",
+  "//db": "DF_WIKI_DB is optional; it defaults to df_wiki_v2.db beside server.py.",
+  "mcpServers": {
+    "df-wiki-search": {
+      "command": "C:\\path\\to\\wiki\\.venv\\Scripts\\python.exe",
+      "args": ["-u", "C:\\path\\to\\wiki\\server.py"],
+      "env": {
+        "PYTHONUNBUFFERED": "1"
+      }
+    }
+  }
+}

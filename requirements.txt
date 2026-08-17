@@ -1,0 +1,9 @@
+# Python 3.14+ (developed on 3.14.6)
+#
+#   python -m venv .venv
+#   .venv/Scripts/pip install -r requirements.txt   # Windows
+#   .venv/bin/pip install -r requirements.txt       # Linux/macOS
+
+# Only for server.py. ingest.py, search.py, schema.py and wikitext.py are
+# pure stdlib — XML parsing uses xml.etree.ElementTree, search uses sqlite3.
+mcp[cli]>=1.28.1
