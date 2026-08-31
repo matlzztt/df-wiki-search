@@ -89,6 +89,16 @@ def build(xml_path, db_path):
     log(f"hashing source ...")
     src_hash = sha256_of(xml_path)
     src_size = os.path.getsize(xml_path)
+    if src_hash != schema.KNOWN_SOURCE["sha256"]:
+        # Not fatal: a deliberate dump replacement (ADR-003) should update
+        # schema.KNOWN_SOURCE, not be blocked by it. But a byte the pipeline
+        # never saw before -- corruption, a truncated download, the wrong
+        # file entirely -- should say so loudly rather than build silently.
+        log(f"WARNING: source does not match the known dump "
+            f"(sha256 {src_hash[:12]}..., expected {schema.KNOWN_SOURCE['sha256'][:12]}...; "
+            f"{src_size:,} bytes, expected {schema.KNOWN_SOURCE['bytes']:,}). "
+            "If this is an intentional new export, update schema.KNOWN_SOURCE "
+            "once the build's invariants pass.")
 
     conn = sqlite3.connect(tmp_path)
     conn.executescript("PRAGMA journal_mode=OFF; PRAGMA synchronous=OFF;")

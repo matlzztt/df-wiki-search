@@ -49,10 +49,28 @@ Installing the package instead of the requirements file also gives you a
 
 ## Obtaining the dump
 
-`df_wiki.xml` is **not tracked in git** — it is a third-party MediaWiki export,
-64 MB, produced via `Special:Export` on the Dwarf Fortress Wiki. Neither it nor
-the built index ships with this repository; supply the dump and build the index
-yourself. Point `ingest.py` at a different path with `--xml`.
+`df_wiki.xml` is **not tracked in git** — it is a third-party MediaWiki export.
+Neither it nor the built index ships with this repository; supply the dump and
+build the index yourself. Point `ingest.py` at a different path with `--xml`.
+
+The dump this project has always used:
+
+| | |
+|---|---|
+| Site | `dwarffortresswiki.org`, via `Special:Export` |
+| Generator | MediaWiki 1.20.4, export schema 0.7 (from the file's own `<siteinfo>`) |
+| Size | 64,013,168 bytes |
+| SHA-256 | `098b75f7673e7eaed0e0400f21a4fc9507a0d138eedfc03f8cd238beec3b15f7` |
+| Newest revision | 2014-09-25 (see `DECISIONS.md` ADR-003) |
+
+The exact export parameters that produced this file were not recorded, and
+`DECISIONS.md` ADR-003 records that a fresh export currently fails server-side
+upstream — so this file cannot presently be reproduced from scratch, only
+verified. `ingest.py` compares any `--xml` you give it against the hash above
+and warns (does not refuse) on a mismatch. That covers you getting the wrong
+file or a corrupted download; it does not mean a different file is wrong to
+use. If you build from a genuinely new export, update `schema.KNOWN_SOURCE`
+once the build's invariants pass, so the next person's warning is accurate.
 
 ## Build
 

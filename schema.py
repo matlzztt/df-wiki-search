@@ -4,6 +4,26 @@ See DECISIONS.md ADR-002: identity comes from the dump's <ns> and page <id>,
 never from splitting the title string.
 """
 
+# The one dump this index has ever been built from, pinned so a substitute
+# file is caught rather than silently indexed.
+#
+# Site:      https://dwarffortresswiki.org (siteinfo/base in the export)
+# Exported:  via Special:Export, "current revision only", full namespace set
+# Generator: MediaWiki 1.20.4, export schema 0.7 (from the file's own header)
+# Obtained:  by the project maintainer, exact export parameters not recorded --
+#            per DECISIONS.md ADR-003, a fresh export was attempted and failed
+#            server-side upstream, so this file cannot currently be reproduced
+#            from scratch. What CAN be verified is that a candidate df_wiki.xml
+#            is the same bytes this project has always used.
+#
+# ingest.py warns, but does not refuse to build, on a mismatch: replacing the
+# dump is a deliberate future action (ADR-003), and the person doing it is
+# expected to update this constant, not be blocked by it.
+KNOWN_SOURCE = {
+    "sha256": "098b75f7673e7eaed0e0400f21a4fc9507a0d138eedfc03f8cd238beec3b15f7",
+    "bytes": 64013168,
+}
+
 # Namespace id -> name. Every entry except 116/117 comes from the dump's
 # <siteinfo> block. 116/117 are undeclared there and are identified as DF2014 /
 # DF2014 Talk from in-corpus evidence -- see AUDIT.md 11.1.
