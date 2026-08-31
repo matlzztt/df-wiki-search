@@ -17,6 +17,10 @@ server.
 | `search.py` | Query layer (pure library, no MCP) |
 | `server.py` | MCP server — three tools |
 | `test_search.py` | Known-answer relevance and robustness tests |
+| `tests/fixture_wiki.xml` | Eleven-page export CI builds an index from |
+| `tests/smoke_server.py` | End-to-end test against a live MCP server |
+| `_version.py` | The one place the release version is written |
+| `pyproject.toml` | Package metadata; `df-wiki-search` console script |
 | `df_wiki_v2.db` | Built index (~119 MB) |
 
 `code.py`, `mcp_df_wiki.py` and `df_wiki.db` are v1 and are superseded. See
@@ -32,8 +36,16 @@ python -m venv .venv
 .venv/Scripts/pip install -r requirements.txt
 ```
 
-Python 3.14+. On Linux/macOS use `.venv/bin/` instead of `.venv/Scripts/`. Only
-the MCP server has a dependency; ingest and search are pure stdlib.
+Python 3.10+ (the MCP SDK's floor; nothing here uses newer syntax). On
+Linux/macOS use `.venv/bin/` instead of `.venv/Scripts/`. Only the MCP server
+has a dependency; ingest and search are pure stdlib.
+
+Installing the package instead of the requirements file also gives you a
+`df-wiki-search` console script, which runs the same server:
+
+```bash
+.venv/Scripts/pip install -e .
+```
 
 ## Obtaining the dump
 
@@ -54,12 +66,43 @@ published. Takes ~30 s.
 
 Options: `--xml PATH`, `--db PATH`.
 
+## Test
+
 ```bash
 python test_search.py
 ```
 
-Runs relevance, robustness, stemming, integrity and retrieval checks. Exit code
-0 means all passed.
+Runs relevance, robustness, stemming, integrity and retrieval checks against
+`df_wiki_v2.db`. Exit code 0 means all passed. `--db PATH` points it at another
+index.
+
+The relevance, stemming and retrieval sets are calibrated against the full
+28,880-page dump and mean nothing without it. `--structural` runs only the
+checks that hold for any index — robustness, rejection, index integrity — which
+is what CI can assert without the dump:
+
+```bash
+python test_search.py --db fixture.db --structural
+```
+
+```bash
+python tests/smoke_server.py
+```
+
+Launches `server.py` and talks to it over real MCP stdio, building a throwaway
+index from `tests/fixture_wiki.xml` first. This is what covers the server
+itself: that it starts, exposes three tools, follows a redirect, scopes a
+prefixed query — and that stdout carries nothing but JSON-RPC, since a stray
+`print()` breaks the client's parser and fails the test.
+
+## CI
+
+`.github/workflows/ci.yml` runs on Linux and Windows across Python 3.10 and
+3.14. It cannot run the relevance suite — the dump is not in this repository —
+so instead it builds a real index from `tests/fixture_wiki.xml` through
+`ingest.py` (invariants and all), runs the structural suite and the server
+smoke test, and checks that a missing index fails at startup rather than inside
+a tool call. A separate job builds the sdist and wheel.
 
 ## Tools
 
@@ -88,8 +131,9 @@ exists in several namespaces the others are listed.
 
 ### `wiki_index_info()`
 
-Source file, revision range, per-namespace counts, build time, parser version.
-Use it to judge how current an answer is likely to be.
+Source file, revision range, per-namespace counts, build time, and two
+versions: the release that built the index and the release now serving it. When
+they differ it says so. Use it to judge how current an answer is likely to be.
 
 ## Schema
 
@@ -150,8 +194,10 @@ user-level `~/.claude.json`:
 ```
 
 Both paths must be absolute — the server is not launched from the project
-directory. `DF_WIKI_DB` overrides the database path. All logging goes to
-stderr; stdout carries only JSON-RPC.
+directory. If you installed the package, `command` can instead be the absolute
+path to the `df-wiki-search` script and `args` can be empty. `DF_WIKI_DB`
+overrides the database path. All logging goes to stderr; stdout carries only
+JSON-RPC.
 
 ## License
 

@@ -13,6 +13,9 @@
 *.xml.gz
 *.xml.bz2
 
+# ...except the CI fixture, which is ours and is tiny.
+!tests/fixture_wiki.xml
+
 # ── Python ────────────────────────────────────────────────────────────────
 __pycache__/
 *.py[cod]

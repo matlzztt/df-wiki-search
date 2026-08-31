@@ -1,0 +1,33 @@
+[build-system]
+requires = ["setuptools>=77"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "df-wiki-search"
+description = "Full-text search over a Dwarf Fortress wiki dump, exposed to Claude as an MCP server."
+readme = "README.md"
+license = "GPL-3.0-or-later"
+license-files = ["LICENSE"]
+dynamic = ["version"]
+
+# The floor is the MCP SDK's, not ours. ingest, schema, search and wikitext are
+# pure stdlib and run on 3.8; nothing in this project uses 3.10+ syntax. Do not
+# raise this without a reason that shows up in `grep`.
+requires-python = ">=3.10"
+
+# Upper bound is deliberate: FastMCP's decorator and transport API live in the
+# 1.x line, and server.py is written against it. A 2.0 must be an explicit,
+# tested bump rather than something a fresh `pip install` discovers for you.
+dependencies = ["mcp[cli]>=1.28.1,<2"]
+
+[project.scripts]
+df-wiki-search = "server:main"
+
+[tool.setuptools]
+# Flat module layout, matching the repository. `ingest.py` and `test_search.py`
+# are run as scripts from a checkout; only the modules the server imports at
+# runtime need to be installed.
+py-modules = ["_version", "schema", "wikitext", "search", "server", "ingest"]
+
+[tool.setuptools.dynamic]
+version = { attr = "_version.__version__" }

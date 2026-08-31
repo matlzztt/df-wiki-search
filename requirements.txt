@@ -1,9 +1,15 @@
-# Python 3.14+ (developed on 3.14.6)
+# Python 3.10+ (developed on 3.14.6)
 #
 #   python -m venv .venv
 #   .venv/Scripts/pip install -r requirements.txt   # Windows
 #   .venv/bin/pip install -r requirements.txt       # Linux/macOS
+#
+# pyproject.toml is the source of truth for release metadata; this file is the
+# convenience path for running from a checkout. `pip install -e .` does the
+# same thing and also gives you the `df-wiki-search` console script.
 
 # Only for server.py. ingest.py, search.py, schema.py and wikitext.py are
-# pure stdlib — XML parsing uses xml.etree.ElementTree, search uses sqlite3.
-mcp[cli]>=1.28.1
+# pure stdlib -- XML parsing uses xml.etree.ElementTree, search uses sqlite3.
+# The upper bound is deliberate: server.py is written against FastMCP's 1.x
+# API, so a 2.0 should be an explicit, tested bump.
+mcp[cli]>=1.28.1,<2

@@ -1,0 +1,177 @@
+<mediawiki xmlns="http://www.mediawiki.org/xml/export-0.10/" version="0.10" xml:lang="en">
+  <siteinfo>
+    <sitename>Dwarf Fortress Wiki (CI fixture)</sitename>
+    <generator>hand-written for CI</generator>
+    <case>first-letter</case>
+  </siteinfo>
+
+  <!--
+    A miniature export that exercises every shape ingest.py has to handle:
+    bare-title ns 116, prefixed ns 114/1000, a resolvable redirect, a dangling
+    redirect, an empty page, a short `/raw` shell that must stay out of the
+    index, a long `/raw` page that must go in, a Talk page that is stored but
+    not indexed, and an unmapped namespace that must be skipped.
+
+    It is NOT a sample of the real corpus and must never be used to calibrate
+    relevance. Its only job is to let CI run the build, the invariants, the
+    structural tests and a live server without the 64 MB dump.
+  -->
+
+  <page>
+    <title>Steel</title>
+    <ns>116</ns>
+    <id>101</id>
+    <revision>
+      <timestamp>2014-09-01T12:00:00Z</timestamp>
+      <text xml:space="preserve">{{av}}
+'''Steel''' is an [[alloy]] of [[iron]] and [[flux]], smelted at a [[smelter]].
+A dwarf must mine iron ore before any forging can begin; mining is therefore the
+first constraint on steel production. Once the ore is hauled to the smelter the
+forge consumes fuel at a steady rate, and forging a single bar takes one job.
+
+Steel is used for weapons, armour, and the walls of a well-defended fortress.
+Building walls from steel is wasteful, but it is possible.
+
+[[Category:Metals]]
+[[Category:Materials]]</text>
+    </revision>
+  </page>
+
+  <page>
+    <title>Magma</title>
+    <ns>116</ns>
+    <id>102</id>
+    <revision>
+      <timestamp>2014-09-25T08:30:00Z</timestamp>
+      <text xml:space="preserve">'''Magma''' is molten rock. It powers a magma [[smelter]] and a magma
+[[forge]] without fuel, which is why so much of fortress design is about
+getting magma to where the forging happens.
+
+Mining down to the magma sea is dangerous. A careless mine shaft floods, and
+the walls of the shaft will not save you. Many a fortress has drowned in its
+own mining project.
+
+[[Category:Materials]]</text>
+    </revision>
+  </page>
+
+  <page>
+    <title>Steel production</title>
+    <ns>116</ns>
+    <id>103</id>
+    <revision>
+      <timestamp>2014-08-11T09:00:00Z</timestamp>
+      <text xml:space="preserve">#REDIRECT [[Steel]]</text>
+    </revision>
+  </page>
+
+  <page>
+    <title>Adamantine</title>
+    <ns>0</ns>
+    <id>104</id>
+    <revision>
+      <timestamp>2013-02-14T22:10:00Z</timestamp>
+      <text xml:space="preserve">#REDIRECT [[cv:Adamantine]]</text>
+    </revision>
+  </page>
+
+  <page>
+    <title>DF2012:Steel</title>
+    <ns>114</ns>
+    <id>105</id>
+    <revision>
+      <timestamp>2012-06-03T17:45:00Z</timestamp>
+      <text xml:space="preserve">'''Steel''' in the 2012 release. Superseded, kept so that a version-prefixed
+title resolves to its own namespace rather than to the current article.
+Mining and forging worked much the same way.</text>
+    </revision>
+  </page>
+
+  <page>
+    <title>Masterwork:Steel</title>
+    <ns>1000</ns>
+    <id>106</id>
+    <revision>
+      <timestamp>2014-03-19T11:11:00Z</timestamp>
+      <text xml:space="preserve">'''Steel''' in the Masterwork mod, where the forge chain gains extra reactions
+and mining yields additional ores. Walls built from mod metals behave normally.</text>
+    </revision>
+  </page>
+
+  <page>
+    <title>Empty page</title>
+    <ns>116</ns>
+    <id>107</id>
+    <revision>
+      <timestamp>2014-01-01T00:00:00Z</timestamp>
+      <text xml:space="preserve">{{stub}}</text>
+    </revision>
+  </page>
+
+  <page>
+    <title>Steel/raw</title>
+    <ns>116</ns>
+    <id>108</id>
+    <revision>
+      <timestamp>2014-05-05T05:05:00Z</timestamp>
+      <text xml:space="preserve">{{raw|DF2014:inorganic_metal.txt|INORGANIC|STEEL}}</text>
+    </revision>
+  </page>
+
+  <page>
+    <title>Masterwork:Undead/raw</title>
+    <ns>1000</ns>
+    <id>109</id>
+    <revision>
+      <timestamp>2014-04-04T04:04:00Z</timestamp>
+      <text xml:space="preserve">[CREATURE:UNDEAD_DWARF][NAME:undead dwarf:undead dwarves:undead dwarven]
+[CASTE:MALE][MALE][DESCRIPTION:A dwarf that will not rest. It mines without
+tiring, and the mining never stops.][BODY:HUMANOID:2EYES:2EARS:NOSE:THROAT]
+[ATTACK:BITE:BODYPART:BY_CATEGORY:ALL:TOOTH][ATTACK_SKILL:BITE]
+[CREATURE_CLASS:GENERAL_POISON][NOT_LIVING][NOFEAR][NOEXERT][NOPAIN]
+[EXTRAVISION][NOBREATHE][NOSTUN][NONAUSEA][NO_DIZZINESS][NO_FEVERS]
+[NOEMOTION][CANOPENDOORS][EQUIPS][ITEMCORPSE_QUALITY:0][PREFSTRING:hunger]
+[CASTE:FEMALE][FEMALE][SELECT_CASTE:ALL][SET_TL_GROUP:BY_CATEGORY:ALL:SKIN]
+[TL_COLOR_MODIFIER:GRAY:1][TLCM_NOUN:skin:SINGULAR][BODY_SIZE:0:0:60000]
+[MAXAGE:0:0][HOMEOTHERM:10050][SWIMS_INNATE][SPEED:900][GRAVITATE_BODY_SIZE:60000]
+[NATURAL_SKILL:MINING:5][NATURAL_SKILL:AXE:5][NATURAL_SKILL:DODGING:3]
+Building a wall against them is the usual answer, and the walls must be thick.
+[CREATURE:UNDEAD_ELF][NAME:undead elf:undead elves:undead elven]
+[DESCRIPTION:It once forged nothing and now forges nothing still.]
+[CASTE:MALE][MALE][CASTE:FEMALE][FEMALE][SELECT_CASTE:ALL][NOT_LIVING]</text>
+    </revision>
+  </page>
+
+  <page>
+    <title>Talk:Steel</title>
+    <ns>117</ns>
+    <id>110</id>
+    <revision>
+      <timestamp>2014-02-02T02:02:00Z</timestamp>
+      <text xml:space="preserve">Should this article mention mining? I think the forge section is enough.
+The walls paragraph is also questionable. ~~~~</text>
+    </revision>
+  </page>
+
+  <page>
+    <title>Utility:Dwarf Therapist</title>
+    <ns>102</ns>
+    <id>111</id>
+    <revision>
+      <timestamp>2014-07-07T07:07:00Z</timestamp>
+      <text xml:space="preserve">'''Dwarf Therapist''' is an external utility for managing labours, including
+mining assignments. It does not change forging or walls in any way.</text>
+    </revision>
+  </page>
+
+  <page>
+    <title>SomeNamespace:Unmapped</title>
+    <ns>9999</ns>
+    <id>112</id>
+    <revision>
+      <timestamp>2014-01-02T03:04:00Z</timestamp>
+      <text xml:space="preserve">This namespace is not in NS_NAMES and must be skipped by the build.</text>
+    </revision>
+  </page>
+
+</mediawiki>

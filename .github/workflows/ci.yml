@@ -1,0 +1,92 @@
+name: CI
+
+# The full index needs a 64 MB third-party dump that is not in this repository,
+# so CI cannot run the known-answer relevance suite. What it can do -- and what
+# this workflow does -- is build a real index from tests/fixture_wiki.xml
+# through the real ingest path, let ingest.py's own invariants reject a bad
+# build, run every check that holds for any index, and then talk to a live
+# server over MCP stdio.
+
+on:
+  push:
+    branches: [main]
+    tags: ["v*"]
+  pull_request:
+  workflow_dispatch:
+
+jobs:
+  test:
+    name: ${{ matrix.os }} / Python ${{ matrix.python }}
+    runs-on: ${{ matrix.os }}
+    strategy:
+      fail-fast: false
+      matrix:
+        # The floor declared in pyproject.toml and the version this is
+        # developed on. Both are tested on both platforms: the project is
+        # written on Windows and documented for POSIX.
+        os: [ubuntu-latest, windows-latest]
+        python: ["3.10", "3.14"]
+
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-python@v5
+        with:
+          python-version: ${{ matrix.python }}
+
+      - name: Install
+        run: |
+          python -m pip install --upgrade pip
+          pip install -e .
+
+      - name: Byte-compile every module
+        run: python -m py_compile _version.py schema.py wikitext.py search.py server.py ingest.py test_search.py tests/smoke_server.py
+
+      - name: Version is consistent between _version.py and package metadata
+        run: python -c "import importlib.metadata as m, _version; a=m.version('df-wiki-search'); b=_version.__version__; print(a, b); assert a == b, f'{a} != {b}'"
+
+      - name: Build a fixture index through the real ingest path
+        run: python ingest.py --xml tests/fixture_wiki.xml --db fixture.db
+
+      - name: Structural test suite
+        run: python test_search.py --db fixture.db --structural
+
+      - name: Live MCP server smoke test
+        run: python tests/smoke_server.py --db fixture.db
+
+      - name: Console-script entry point resolves
+        env:
+          DF_WIKI_DB: fixture.db
+        run: python -c "import server; assert callable(server.main); print('df-wiki-search -> server:main ok')"
+
+      - name: A missing index fails at startup, not inside a tool call
+        env:
+          DF_WIKI_DB: no-such-index.db
+        shell: bash
+        run: |
+          if python -c "import server" 2>err.txt; then
+            echo "expected a missing index to fail at import"; exit 1
+          fi
+          grep -q "no index at" err.txt || { echo "wrong error:"; cat err.txt; exit 1; }
+          echo "startup verification ok"
+
+  package:
+    name: Build distributions
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.14"
+
+      - name: Build sdist and wheel
+        run: |
+          python -m pip install --upgrade pip build twine
+          python -m build
+          twine check dist/*
+
+      - uses: actions/upload-artifact@v4
+        with:
+          name: dist
+          path: dist/

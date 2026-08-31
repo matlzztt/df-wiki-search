@@ -18,6 +18,7 @@ sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
 
 import search
 import schema
+from _version import __version__
 
 PROJECT_DIR = os.path.dirname(os.path.abspath(__file__))
 DB_PATH = os.environ.get("DF_WIKI_DB", os.path.join(PROJECT_DIR, "df_wiki_v2.db"))
@@ -132,7 +133,11 @@ def wiki_index_info() -> str:
         f"to **{info.get('dump_revision_max','?')[:10]}**",
         f"- **Pages stored:** {info.get('pages_indexed')} "
         f"(searchable: {sum(n['indexed'] for n in info['namespaces']):,})",
-        f"- **Built:** {info.get('built_at')} by parser {info.get('parser_version')}",
+        f"- **Built:** {info.get('built_at')} by df-wiki-search "
+        f"{info.get('parser_version')}",
+        f"- **Server:** df-wiki-search {__version__}"
+        + ("" if info.get("parser_version") == __version__ else
+           "  (newer than the index above -- rebuild with `python ingest.py`)"),
         f"- **Default search scope:** {', '.join(info['default_scope'])}",
         "",
         "This dump predates DF v50. Treat mechanics as broadly current but",
@@ -147,5 +152,15 @@ def wiki_index_info() -> str:
     return "\n".join(lines)
 
 
-if __name__ == "__main__":
+def main():
+    """Console-script entry point (`df-wiki-search`).
+
+    The index is already open by the time this runs: verification happens at
+    import, so a bad or missing index fails before the transport starts rather
+    than inside a tool call.
+    """
     mcp.run()
+
+
+if __name__ == "__main__":
+    main()

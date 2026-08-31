@@ -18,12 +18,15 @@ import xml.etree.ElementTree as ET
 
 import schema
 import wikitext
+from _version import __version__
 
 PROJECT_DIR = os.path.dirname(os.path.abspath(__file__))
 DEFAULT_XML = os.path.join(PROJECT_DIR, "df_wiki.xml")
 DEFAULT_DB = os.path.join(PROJECT_DIR, "df_wiki_v2.db")
 
-PARSER_VERSION = "2.0.0"
+# The parser version recorded in every index is the release that built it, so
+# `wiki_index_info()` can say when the server is newer than the index it serves.
+PARSER_VERSION = __version__
 
 
 def log(msg):
