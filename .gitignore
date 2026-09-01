@@ -6,6 +6,16 @@
 *.sqlite
 *.sqlite3
 
+# Compressed too. `*.db` does not match `df_wiki_v2.db.gz` -- the name ends in
+# .gz -- so a 33 MB build artifact sat untracked-and-unignored, one `git add -A`
+# away from being committed to a public repo permanently. The reasoning above
+# does not change when the file is zipped. Ship a prebuilt index as a release
+# asset, never as a tracked file.
+*.db.gz
+*.db.bz2
+*.db.zst
+*.db.zip
+
 # ── Source dump ───────────────────────────────────────────────────────────
 # df_wiki.xml is a third-party MediaWiki export (64 MB), not ours to ship.
 # See README "Obtaining the dump".
