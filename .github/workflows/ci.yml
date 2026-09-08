@@ -45,6 +45,12 @@ jobs:
       - name: Version is consistent between _version.py and package metadata
         run: python -c "import importlib.metadata as m, _version; a=m.version('df-wiki-search'); b=_version.__version__; print(a, b); assert a == b, f'{a} != {b}'"
 
+      - name: CHANGELOG.md has an entry for the current version
+        shell: bash
+        run: |
+          v=$(python -c "import _version; print(_version.__version__)")
+          grep -q "\[$v\]" CHANGELOG.md || { echo "no CHANGELOG entry for $v"; exit 1; }
+
       - name: Build a fixture index through the real ingest path
         run: python ingest.py --xml tests/fixture_wiki.xml --db fixture.db
 

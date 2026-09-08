@@ -23,6 +23,10 @@ dependencies = ["mcp[cli]>=1.28.1,<2"]
 [project.scripts]
 df-wiki-search = "server:main"
 
+[project.urls]
+Source = "https://github.com/matlzztt/df-wiki-search"
+Changelog = "https://github.com/matlzztt/df-wiki-search/blob/main/CHANGELOG.md"
+
 [tool.setuptools]
 # Flat module layout, matching the repository. `ingest.py` and `test_search.py`
 # are run as scripts from a checkout; only the modules the server imports at
